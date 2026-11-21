@@ -1,0 +1,308 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Appointments - CityCare Hospital</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5f9;
+            padding: 25px;
+        }
+
+        h1 {
+            color: #087f8c;
+        }
+
+        .filter-container {
+            background: white;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .filter-container input,
+        .filter-container select {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .search-btn {
+            background: #087f8c;
+            color: white;
+        }
+
+        .reset-btn {
+            display: inline-block;
+            background: #777;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        .appointment-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .update-btn {
+            background: #087f8c;
+            color: white;
+        }
+
+        .whatsapp-btn {
+            display: inline-block;
+            background: #25D366;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        select {
+            padding: 8px;
+            margin: 10px;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #087f8c;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>All Appointments</h1>
+
+    <!-- Search and Filter Section -->
+
+    <div class="filter-container">
+
+        <form method="GET">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search patient name or Booking ID"
+                value="{{ search }}"
+            >
+
+            <select name="status">
+                <option value="">All Statuses</option>
+
+                <option value="Pending"
+                    {% if selected_status == "Pending" %}selected{% endif %}>
+                    Pending
+                </option>
+
+                <option value="Approved"
+                    {% if selected_status == "Approved" %}selected{% endif %}>
+                    Approved
+                </option>
+
+                <option value="Completed"
+                    {% if selected_status == "Completed" %}selected{% endif %}>
+                    Completed
+                </option>
+
+                <option value="Cancelled"
+                    {% if selected_status == "Cancelled" %}selected{% endif %}>
+                    Cancelled
+                </option>
+            </select>
+
+            <input
+                type="date"
+                name="date"
+                value="{{ selected_date }}"
+            >
+
+            <button type="submit" class="search-btn">
+                Search / Filter
+            </button>
+
+            <a href="{% url 'appointment_list' %}" class="reset-btn">
+                Reset
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <!-- Appointment Cards -->
+
+    {% for appointment in appointments %}
+
+        <div class="appointment-card">
+
+            <h2>Patient: {{ appointment.patient.name }}</h2>
+
+            <p>
+                Booking ID:
+                HOSP-{{ appointment.id|stringformat:"04d" }}
+            </p>
+
+            <p>Doctor: {{ appointment.doctor.name }}</p>
+
+            <p>
+                Specialization:
+                {{ appointment.doctor.specialization }}
+            </p>
+
+            <p>Date: {{ appointment.appointment_date }}</p>
+
+            <p>Time: {{ appointment.appointment_time }}</p>
+
+            <p>Reason: {{ appointment.reason }}</p>
+
+            <p>
+                Current Status:
+                <strong class="status">
+                    {{ appointment.status }}
+                </strong>
+            </p>
+
+            {% if request.user.is_authenticated and request.user.is_staff %}
+
+                <!-- Update Appointment Status -->
+
+                <form method="POST"
+                      action="{% url 'update_appointment_status' appointment.id %}">
+
+                    {% csrf_token %}
+
+                    <label>Update Status:</label>
+
+                    <select name="status" required>
+
+                        <option value="Pending"
+                            {% if appointment.status == "Pending" %}selected{% endif %}>
+                            Pending
+                        </option>
+
+                        <option value="Approved"
+                            {% if appointment.status == "Approved" %}selected{% endif %}>
+                            Approved
+                        </option>
+
+                        <option value="Completed"
+                            {% if appointment.status == "Completed" %}selected{% endif %}>
+                            Completed
+                        </option>
+
+                        <option value="Cancelled"
+                            {% if appointment.status == "Cancelled" %}selected{% endif %}>
+                            Cancelled
+                        </option>
+
+                    </select>
+
+                    <button type="submit" class="update-btn">
+                        Update Status
+                    </button>
+
+                </form>
+
+
+                <!-- WhatsApp Patient -->
+
+                <a href="#"
+                   class="whatsapp-btn whatsapp-link"
+                   data-phone="{{ appointment.patient.phone }}"
+                   data-name="{{ appointment.patient.name }}"
+                   data-booking="HOSP-{{ appointment.id|stringformat:'04d' }}"
+                   data-doctor="{{ appointment.doctor.name }}"
+                   data-date="{{ appointment.appointment_date }}"
+                   data-time="{{ appointment.appointment_time }}"
+                   data-status="{{ appointment.status }}">
+
+                    WhatsApp Patient
+
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    {% empty %}
+
+        <p>No appointments found.</p>
+
+    {% endfor %}
+
+
+    <a href="/" class="back-link">← Back to Home</a>
+
+
+    <!-- WhatsApp JavaScript -->
+
+    <script>
+
+        document.querySelectorAll(".whatsapp-link").forEach(function(button) {
+
+            button.addEventListener("click", function(event) {
+
+                event.preventDefault();
+
+                let phone = this.dataset.phone.replace(/\D/g, "");
+
+                if (phone.length === 10) {
+                    phone = "91" + phone;
+                }
+
+                if (phone.length < 10) {
+                    alert("Patient phone number is not available.");
+                    return;
+                }
+
+                let message =
+                    "Hello " + this.dataset.name + ",\n\n" +
+                    "Your CityCare Hospital appointment details:\n\n" +
+                    "Booking ID: " + this.dataset.booking + "\n" +
+                    "Doctor: " + this.dataset.doctor + "\n" +
+                    "Date: " + this.dataset.date + "\n" +
+                    "Time: " + this.dataset.time + "\n" +
+                    "Appointment Status: " + this.dataset.status + "\n\n" +
+                    "Thank you for choosing CityCare Hospital.";
+
+                let whatsappURL =
+                    "https://wa.me/" + phone +
+                    "?text=" + encodeURIComponent(message);
+
+                window.open(whatsappURL, "_blank");
+
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>
+```

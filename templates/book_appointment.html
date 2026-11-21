@@ -1,0 +1,275 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Appointment - CityCare Hospital</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        .booking-container {
+            max-width: 650px;
+            margin: 30px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .booking-container input,
+        .booking-container select,
+        .booking-container textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            margin-bottom: 18px;
+            box-sizing: border-box;
+        }
+
+        .booking-container label {
+            font-weight: bold;
+        }
+
+        .slot-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .slot-button {
+            padding: 10px 16px;
+            border: 1px solid #0077b6;
+            background: white;
+            color: #0077b6;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .slot-button.selected {
+            background: #0077b6;
+            color: white;
+        }
+
+        .slot-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 15px;
+        }
+
+        #slot-message {
+            color: #555;
+            margin: 10px 0;
+        }
+
+        .submit-button {
+            background: #023e8a;
+            color: white;
+            padding: 13px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="booking-container">
+
+    <h1>Book Your Appointment</h1>
+
+    {% if errors %}
+    <div class="error-message">
+        {% for error in errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <label>Patient Name:</label>
+        <input type="text" name="patient_name" required>
+
+        <label>Phone Number:</label>
+        <input type="text" name="phone" required>
+
+        <label>Age:</label>
+        <input type="number" name="age" min="1" max="120" required>
+
+        <label>Gender:</label>
+        <select name="gender" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label>Email:</label>
+        <input type="email" name="email" required>
+
+        <label>Address:</label>
+        <textarea name="address" required></textarea>
+
+        <label>Select Doctor:</label>
+
+        <select name="doctor" id="doctor" required>
+
+            <option value="">-- Select Doctor --</option>
+
+            {% for doctor in doctors %}
+            <option value="{{ doctor.id }}">
+                {{ doctor.name }} - {{ doctor.specialization }}
+            </option>
+            {% endfor %}
+
+        </select>
+
+        <label>Appointment Date:</label>
+
+        <input
+            type="date"
+            name="date"
+            id="appointment-date"
+            min="{{ today|date:'Y-m-d' }}"
+            required
+        >
+
+        <label>Available Appointment Times:</label>
+
+        <div id="slot-message">
+            Please select a doctor and appointment date.
+        </div>
+
+        <div class="slot-container" id="slot-container"></div>
+
+        <input
+            type="hidden"
+            name="time"
+            id="selected-time"
+            required
+        >
+
+        <label>Reason for Appointment:</label>
+
+        <textarea name="reason" required></textarea>
+
+        <button type="submit" class="submit-button">
+            Submit Appointment
+        </button>
+
+    </form>
+
+</div>
+
+
+<script>
+
+const doctorSelect = document.getElementById("doctor");
+
+const dateInput = document.getElementById("appointment-date");
+
+const slotContainer = document.getElementById("slot-container");
+
+const slotMessage = document.getElementById("slot-message");
+
+const selectedTime = document.getElementById("selected-time");
+
+
+async function loadAvailableSlots() {
+
+    slotContainer.innerHTML = "";
+    selectedTime.value = "";
+
+    const doctor = doctorSelect.value;
+    const appointmentDate = dateInput.value;
+
+    if (!doctor || !appointmentDate) {
+
+        slotMessage.textContent =
+            "Please select a doctor and appointment date.";
+
+        return;
+    }
+
+    slotMessage.textContent = "Checking available slots...";
+
+    try {
+
+        const response = await fetch(
+            `/get-doctor-slots/?doctor=${doctor}&date=${appointmentDate}`
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to load slots");
+        }
+
+        const data = await response.json();
+
+        slotContainer.innerHTML = "";
+
+        if (data.slots.length === 0) {
+
+            slotMessage.textContent =
+                "No appointment slots available for this date.";
+
+            return;
+        }
+
+        slotMessage.textContent =
+            "Select an available appointment time:";
+
+        data.slots.forEach(function(time) {
+
+            const button = document.createElement("button");
+
+            button.type = "button";
+            button.textContent = time;
+
+            button.classList.add("slot-button");
+
+            button.addEventListener("click", function() {
+
+                document.querySelectorAll(".slot-button").forEach(
+                    function(btn) {
+                        btn.classList.remove("selected");
+                    }
+                );
+
+                button.classList.add("selected");
+
+                selectedTime.value = time;
+
+            });
+
+            slotContainer.appendChild(button);
+
+        });
+
+    } catch (error) {
+
+        slotMessage.textContent =
+            "Unable to load available slots. Please try again.";
+
+    }
+
+}
+
+
+doctorSelect.addEventListener("change", loadAvailableSlots);
+
+dateInput.addEventListener("change", loadAvailableSlots);
+
+
+</script>
+
+</body>
+</html>

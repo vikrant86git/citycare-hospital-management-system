@@ -1,0 +1,428 @@
+/* =========================
+   GLOBAL STYLING
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f9ff;
+    color: #12345a;
+}
+
+
+/* =========================
+   NAVIGATION BAR
+========================= */
+
+.navbar {
+    min-height: 90px;
+    background-color: #ffffff;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 15px 4%;
+    gap: 25px;
+
+    box-shadow: 0 3px 15px rgba(0, 50, 100, 0.10);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #073b79;
+}
+
+.logo-icon {
+    font-size: 42px;
+    color: #00a9d6;
+}
+
+.logo h2 {
+    font-size: 23px;
+}
+
+.logo small {
+    color: #526b87;
+    font-style: italic;
+}
+
+.navbar ul {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    list-style: none;
+    flex-wrap: wrap;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: #12345a;
+    font-weight: bold;
+    padding: 13px 16px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.navbar ul li a:hover,
+.navbar ul li a.active {
+    background-color: #0879d9;
+    color: white;
+}
+
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.hero {
+    min-height: 480px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 60px 5%;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0, 30, 65, 0.78),
+            rgba(0, 30, 65, 0.30)
+        ),
+        url("/static/images/hospital_building.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero-content {
+    max-width: 650px;
+    color: white;
+}
+
+.hero h1 {
+    font-size: 58px;
+    line-height: 1.15;
+    margin-bottom: 22px;
+}
+
+.hero h1 span {
+    color: #38e0ed;
+}
+
+.hero p {
+    font-size: 19px;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.primary-btn,
+.secondary-btn {
+    display: inline-block;
+    padding: 15px 26px;
+
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+
+    transition: 0.3s;
+}
+
+.primary-btn {
+    background-color: #0786e8;
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: #005bb5;
+    transform: translateY(-3px);
+}
+
+.secondary-btn {
+    border: 2px solid white;
+    color: white;
+}
+
+.secondary-btn:hover {
+    background-color: white;
+    color: #07549b;
+}
+
+
+/* =========================
+   HIGHLIGHTS SECTION
+========================= */
+
+.highlights {
+    margin: 25px 4%;
+    padding: 25px;
+
+    background-color: #e3f1ff;
+    border-radius: 15px;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.highlight {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+
+    border-right: 1px solid #a8c9e8;
+}
+
+.highlight:last-child {
+    border-right: none;
+}
+
+.highlight span {
+    font-size: 36px;
+}
+
+.highlight h3 {
+    font-size: 18px;
+    color: #073b79;
+}
+
+.highlight p {
+    color: #526b87;
+    margin-top: 6px;
+    font-size: 14px;
+}
+
+
+/* =========================
+   SERVICES SECTION
+========================= */
+
+.services {
+    padding: 55px 4%;
+    text-align: center;
+}
+
+.services h2 {
+    font-size: 36px;
+    color: #0869bd;
+    margin-bottom: 12px;
+}
+
+.section-subtitle {
+    color: #65758a;
+    font-size: 16px;
+    margin-bottom: 35px;
+}
+
+.service-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.service-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    padding: 30px 25px;
+    border-radius: 15px;
+
+    text-align: left;
+
+    box-shadow: 0 5px 15px rgba(0, 50, 100, 0.10);
+
+    transition: 0.3s;
+}
+
+.service-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 10px 25px rgba(0, 50, 100, 0.15);
+}
+
+.blue-card {
+    background-color: #d9edff;
+}
+
+.green-card {
+    background-color: #d9f9f2;
+}
+
+.pink-card {
+    background-color: #ffe7ef;
+}
+
+.service-icon {
+    font-size: 45px;
+}
+
+.service-card h3 {
+    color: #073b79;
+    margin-bottom: 12px;
+    font-size: 19px;
+}
+
+.service-card p {
+    color: #526b87;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.service-card a {
+    display: inline-block;
+
+    background-color: #0879d9;
+    color: white;
+
+    padding: 10px 20px;
+
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+
+    transition: 0.3s;
+}
+
+.service-card a:hover {
+    background-color: #005bb5;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    background-color: #052e60;
+    color: white;
+
+    padding: 35px 4%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.footer-logo h2 {
+    font-size: 23px;
+}
+
+.footer-logo p {
+    color: #b8d9f5;
+    margin-top: 7px;
+}
+
+.copyright {
+    width: 100%;
+    text-align: center;
+
+    border-top: 1px solid #53749b;
+
+    padding-top: 18px;
+    margin-top: 10px;
+
+    color: #d3e5f8;
+}
+
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+@media (max-width: 1000px) {
+
+    .navbar {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .navbar ul {
+        justify-content: center;
+    }
+
+    .service-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .highlights {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .highlight {
+        border-right: none;
+        padding: 10px;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .navbar ul {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .navbar ul li a {
+        display: block;
+        text-align: center;
+    }
+
+    .hero {
+        min-height: 420px;
+        padding: 35px 20px;
+        background-position: center;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+    }
+
+    .hero-buttons a {
+        text-align: center;
+    }
+
+    .highlights {
+        grid-template-columns: 1fr;
+    }
+
+    .service-container {
+        grid-template-columns: 1fr;
+    }
+
+    .service-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    footer {
+        flex-direction: column;
+        text-align: center;
+    }
+
+}

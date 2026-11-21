@@ -1,0 +1,289 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Check Appointment Status | CityCare Hospital</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #eef5fb;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.07);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0879c9;
+        }
+
+        .logo span {
+            color: #153c61;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #0879c9;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 65px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            color: #153c61;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccd8e2;
+            border-radius: 6px;
+            margin-bottom: 22px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0879c9;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #0879c9;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #075f9d;
+        }
+
+        .error {
+            background: #ffe5e5;
+            color: #c0392b;
+            padding: 13px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .result {
+            background: #eaf6fd;
+            padding: 22px;
+            border-radius: 8px;
+            margin-top: 25px;
+        }
+
+        .result h2 {
+            color: #0879c9;
+            margin-bottom: 18px;
+        }
+
+        .result p {
+            margin-bottom: 12px;
+            color: #34495e;
+        }
+
+        .status {
+            font-weight: bold;
+            color: #0879c9;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #0879c9;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media(max-width: 600px) {
+            .card {
+                padding: 25px;
+            }
+
+            .container {
+                margin: 30px auto;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            CityCare <span>Hospital</span>
+        </div>
+
+        <a href="{% url 'home' %}">Back to Home</a>
+
+    </nav>
+
+
+    <div class="container">
+
+        <div class="card">
+
+            <h1>Check Appointment Status</h1>
+
+            <p class="description">
+                Enter your Booking ID and registered email address
+                to check your appointment details.
+            </p>
+
+
+            {% if error %}
+
+                <div class="error">
+                    {{ error }}
+                </div>
+
+            {% endif %}
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <label>Booking ID</label>
+
+                <input
+                    type="text"
+                    name="booking_id"
+                    placeholder="Example: HOSP-0001"
+                    required
+                >
+
+                <label>Registered Email Address</label>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter your registered email"
+                    required
+                >
+
+                <button type="submit">
+                    Check Status
+                </button>
+
+            </form>
+
+
+            {% if appointment %}
+
+                <div class="result">
+
+                    <h2>Appointment Details</h2>
+
+                    <p>
+                        <strong>Booking ID:</strong>
+                        HOSP-{{ appointment.id|stringformat:"04d" }}
+                    </p>
+
+                    <p>
+                        <strong>Patient Name:</strong>
+                        {{ appointment.patient.name }}
+                    </p>
+
+                    <p>
+                        <strong>Doctor:</strong>
+                        {{ appointment.doctor.name }}
+                    </p>
+
+                    <p>
+                        <strong>Specialization:</strong>
+                        {{ appointment.doctor.specialization }}
+                    </p>
+
+                    <p>
+                        <strong>Appointment Date:</strong>
+                        {{ appointment.appointment_date }}
+                    </p>
+
+                    <p>
+                        <strong>Appointment Time:</strong>
+                        {{ appointment.appointment_time }}
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+
+                        <span class="status">
+                            {{ appointment.status }}
+                        </span>
+
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+
+            <a href="{% url 'home' %}" class="back">
+                ← Back to Home
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

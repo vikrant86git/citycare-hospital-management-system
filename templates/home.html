@@ -1,0 +1,908 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CityCare Hospital</title>
+
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <meta name="theme-color" content="#0878c9">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #f5f9fc;
+            color: #243447;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            width: 100%;
+            padding: 15px 6%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: #0878c9;
+            font-size: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #263746;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #0878c9;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            min-height: 620px;
+            padding: 70px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 45px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(10, 35, 65, 0.88),
+                    rgba(10, 35, 65, 0.35)
+                ),
+                url("{% static 'images/doctor_hero.png' %}");
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .hero-left {
+            flex: 1 1 55%;
+            max-width: 650px;
+            color: white;
+        }
+
+        .hero-left h1 {
+            font-size: clamp(38px, 5vw, 60px);
+            line-height: 1.15;
+            margin-bottom: 22px;
+        }
+
+        .hero-left h1 span {
+            color: #58d8ff;
+        }
+
+        .hero-left p {
+            font-size: 17px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: #f0f7ff;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 13px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .primary-btn {
+            background: #0878c9;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: #005b9e;
+            transform: translateY(-3px);
+        }
+
+        .secondary-btn {
+            background: white;
+            color: #0878c9;
+        }
+
+        .secondary-btn:hover {
+            background: #dff3ff;
+            transform: translateY(-3px);
+        }
+
+        /* HEALTH TIPS */
+        .hero-right {
+            flex: 0 1 370px;
+            width: 100%;
+        }
+
+        .tip-card {
+            background: transparent;
+            box-shadow: none;
+            text-align: center;
+            padding: 25px;
+            color: white;
+            transition: opacity 0.7s ease;
+            min-height: 220px;
+        }
+
+        .tip-card h2 {
+            color: #58d8ff;
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-shadow: 1px 2px 5px rgba(0,0,0,0.7);
+        }
+
+        .tip-card h3 {
+            color: white;
+            font-size: 25px;
+            margin-bottom: 15px;
+            text-shadow: 1px 2px 5px rgba(0,0,0,0.8);
+        }
+
+        .tip-card p {
+            color: white;
+            font-size: 18px;
+            line-height: 1.7;
+            text-shadow: 1px 2px 5px rgba(0,0,0,0.9);
+        }
+
+        /* COMMON SECTIONS */
+        .section {
+            padding: 75px 7%;
+        }
+
+        .section-title {
+            text-align: center;
+            color: #0878c9;
+            font-size: 34px;
+            margin-bottom: 15px;
+        }
+
+        .section-description {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+            color: #657584;
+        }
+
+        /* HIGHLIGHTS */
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+        }
+
+        .highlight-card {
+            background: white;
+            padding: 30px 18px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+            transition: 0.3s;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-7px);
+        }
+
+        .highlight-card .icon {
+            font-size: 35px;
+            margin-bottom: 15px;
+        }
+
+        .highlight-card h3 {
+            color: #0878c9;
+            margin-bottom: 10px;
+        }
+
+        .highlight-card p {
+            color: #657584;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* ABOUT */
+        .about {
+            background: white;
+            text-align: center;
+        }
+
+        .about-content {
+            max-width: 850px;
+            margin: auto;
+            line-height: 1.9;
+            color: #596c7b;
+            font-size: 16px;
+        }
+
+        /* SERVICES */
+        .services {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 28px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            transition: 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-7px);
+        }
+
+        .service-card .icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .service-card h3 {
+            color: #0878c9;
+            margin-bottom: 12px;
+        }
+
+        .service-card p {
+            color: #657584;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        /* WHY CHOOSE US */
+        .why-us {
+            background: #eaf6ff;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .why-card {
+            background: white;
+            padding: 28px;
+            text-align: center;
+            border-radius: 15px;
+        }
+
+        .why-card h3 {
+            color: #0878c9;
+            margin-bottom: 12px;
+        }
+
+        .why-card p {
+            color: #657584;
+            line-height: 1.7;
+        }
+
+        /* CONTACT */
+        .contact {
+            background: white;
+            text-align: center;
+        }
+
+        .contact-details {
+            line-height: 2.2;
+            color: #526575;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #102f49;
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+            line-height: 1.8;
+        }
+
+        /* TABLET */
+        @media (max-width: 1000px) {
+            .nav-links {
+                gap: 12px;
+            }
+
+            .hero {
+                gap: 25px;
+            }
+
+            .highlights {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .services {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* MOBILE */
+        @media (max-width: 800px) {
+            .navbar {
+                flex-direction: column;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .hero {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 60px 7%;
+                text-align: center;
+            }
+
+            .hero-left {
+                max-width: 100%;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-right {
+                max-width: 430px;
+                margin: 15px auto 0;
+            }
+
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-links a {
+                font-size: 12px;
+            }
+
+            .highlights,
+            .services {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 55px 6%;
+            }
+
+            .hero {
+                padding: 50px 6%;
+            }
+
+            .hero-left p {
+                font-size: 15px;
+            }
+
+            .btn {
+                padding: 12px 15px;
+            }
+
+            .tip-card {
+                padding: 20px 10px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+
+        <a href="{% url 'home' %}" class="logo">
+            🏥 CityCare Hospital
+        </a>
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'doctor_list' %}">Doctors</a>
+            <a href="{% url 'book_appointment' %}">Appointments</a>
+            <a href="{% url 'check_appointment_status' %}">Check Status</a>
+            <a href="/admin/login/">Staff Login</a>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+        </div>
+
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+
+        <div class="hero-left">
+
+            <h1>
+                Your Health,<br>
+                <span>Our Priority</span>
+            </h1>
+
+            <p>
+                Welcome to CityCare Hospital. We provide quality
+                healthcare services with experienced doctors,
+                modern facilities and compassionate care.
+                Your health and happiness are our priority.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="{% url 'book_appointment' %}"
+                   class="btn primary-btn">
+                    Book Appointment
+                </a>
+
+                <a href="{% url 'doctor_list' %}"
+                   class="btn secondary-btn">
+                    Explore Doctors
+                </a>
+
+                <a href="{% url 'check_appointment_status' %}"
+                   class="btn secondary-btn">
+                    Check Status
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- DAILY HEALTH TIPS -->
+        <div class="hero-right">
+
+            <div class="tip-card">
+
+                <h2>💚 Daily Health Tips</h2>
+
+                <h3 id="tip-title">Stay Hydrated</h3>
+
+                <p id="tip-text">
+                    Drink enough water throughout the day to stay hydrated.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- HIGHLIGHTS -->
+    <section class="section">
+
+        <h2 class="section-title">Our Highlights</h2>
+
+        <p class="section-description">
+            We are committed to providing reliable and quality healthcare.
+        </p>
+
+        <div class="highlights">
+
+            <div class="highlight-card">
+                <div class="icon">🚑</div>
+                <h3>24/7 Emergency</h3>
+                <p>Emergency support and care when you need it.</p>
+            </div>
+
+            <div class="highlight-card">
+                <div class="icon">👨‍⚕️</div>
+                <h3>Expert Doctors</h3>
+                <p>Experienced healthcare professionals for your needs.</p>
+            </div>
+
+            <div class="highlight-card">
+                <div class="icon">🏥</div>
+                <h3>Modern Facilities</h3>
+                <p>Patient-focused facilities and healthcare services.</p>
+            </div>
+
+            <div class="highlight-card">
+                <div class="icon">❤️</div>
+                <h3>Patient First</h3>
+                <p>Your comfort, safety and well-being matter to us.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section about" id="about">
+
+        <h2 class="section-title">About CityCare Hospital</h2>
+
+        <p class="section-description">
+            Caring for people with compassion and commitment.
+        </p>
+
+        <div class="about-content">
+            CityCare Hospital is designed to make healthcare services
+            easier and more accessible. Patients can explore doctors,
+            book appointments and check appointment status through
+            our hospital management system.
+
+            Our goal is to provide a convenient and patient-friendly
+            healthcare experience.
+        </div>
+
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section">
+
+        <h2 class="section-title">Our Services</h2>
+
+        <p class="section-description">
+            Healthcare services designed around patient needs.
+        </p>
+
+        <div class="services">
+
+            <div class="service-card">
+                <div class="icon">🩺</div>
+                <h3>General Consultation</h3>
+                <p>Consult healthcare professionals for general health concerns.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon">🚑</div>
+                <h3>Emergency Care</h3>
+                <p>Get guidance on accessing emergency medical care.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon">👨‍⚕️</div>
+                <h3>Specialist Doctors</h3>
+                <p>Explore doctors and their areas of specialization.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon">💓</div>
+                <h3>Health Checkups</h3>
+                <p>Learn about preventive health checks and routine care.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon">🤝</div>
+                <h3>Patient Care</h3>
+                <p>We focus on a comfortable and supportive patient experience.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon">📅</div>
+                <h3>Online Appointments</h3>
+                <p>Book appointments and check their status online.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- WHY CHOOSE US -->
+    <section class="section why-us">
+
+        <h2 class="section-title">Why Choose Us?</h2>
+
+        <p class="section-description">
+            Making your healthcare experience simpler and more convenient.
+        </p>
+
+        <div class="why-grid">
+
+            <div class="why-card">
+                <h3>Qualified Professionals</h3>
+                <p>Explore doctors and their professional specializations.</p>
+            </div>
+
+            <div class="why-card">
+                <h3>Easy Appointment Booking</h3>
+                <p>Book appointments through our online hospital system.</p>
+            </div>
+
+            <div class="why-card">
+                <h3>Patient Satisfaction</h3>
+                <p>We aim to make every patient interaction comfortable.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact">
+
+        <h2 class="section-title">Contact Us</h2>
+
+        <p class="section-description">
+            We are here to help you.
+        </p>
+
+        <div class="contact-details">
+            <p>📍 Bengaluru, Karnataka, India</p>
+            <p>📞 +91 98765 43210</p>
+            <p>✉️ info@citycarehospital.com</p>
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+
+        <h3>CityCare Hospital</h3>
+
+        <p>Your Health, Our Priority.</p>
+
+        <p>© 2026 CityCare Hospital. All Rights Reserved.</p>
+
+    </footer>
+
+    <!-- AUTOMATIC HEALTH TIPS AND PWA -->
+    <script>
+
+        const healthTips = [
+
+            {
+                title: "Stay Hydrated",
+                text: "Drink enough water throughout the day to stay hydrated."
+            },
+
+            {
+                title: "Eat Healthy",
+                text: "Include fresh fruits and vegetables in your daily meals."
+            },
+
+            {
+                title: "Exercise Daily",
+                text: "Regular physical activity supports your overall health."
+            },
+
+            {
+                title: "Get Enough Sleep",
+                text: "Maintain a regular sleep schedule and get sufficient rest."
+            },
+
+            {
+                title: "Wash Your Hands",
+                text: "Wash your hands regularly to help prevent the spread of germs."
+            },
+
+            {
+                title: "Take Screen Breaks",
+                text: "Give your eyes regular breaks when using computers or phones."
+            },
+
+            {
+                title: "Eat a Balanced Diet",
+                text: "Choose a variety of nutritious foods for a balanced diet."
+            },
+
+            {
+                title: "Regular Health Checkups",
+                text: "Schedule routine health checkups as recommended by your healthcare professional."
+            }
+
+        ];
+
+        let currentTip = 0;
+
+        function showTip() {
+
+            const card = document.querySelector(".tip-card");
+
+            card.style.opacity = "0";
+
+            setTimeout(function () {
+
+                document.getElementById("tip-title").textContent =
+                    healthTips[currentTip].title;
+
+                document.getElementById("tip-text").textContent =
+                    healthTips[currentTip].text;
+
+                card.style.opacity = "1";
+
+            }, 700);
+
+        }
+
+        function nextTip() {
+
+            currentTip = (currentTip + 1) % healthTips.length;
+
+            showTip();
+
+        }
+
+        setInterval(nextTip, 5000);
+
+        // PWA SERVICE WORKER
+        if ("serviceWorker" in navigator) {
+
+            window.addEventListener("load", function () {
+
+                navigator.serviceWorker.register("/service-worker.js")
+                    .catch(function (error) {
+                        console.log("Service Worker registration failed:", error);
+                    });
+
+            });
+
+        }
+
+    </script>
+
+    <!-- FRAMER MOTION ANIMATIONS -->
+    <script type="module">
+
+        import { animate, inView } from
+        "https://cdn.jsdelivr.net/npm/motion@14.11.1/+esm";
+
+        // 1. Navbar animation
+        animate(".navbar",
+            {
+                opacity: [0, 1],
+                y: [-30, 0]
+            },
+            {
+                duration: 0.8,
+                ease: "easeOut"
+            }
+        );
+
+        // 2. Hero text animation
+        animate(".hero-left",
+            {
+                opacity: [0, 1],
+                x: [-80, 0]
+            },
+            {
+                duration: 1.2,
+                ease: "easeOut"
+            }
+        );
+
+        // 3. Health tips animation
+        animate(".hero-right",
+            {
+                opacity: [0, 1],
+                x: [80, 0]
+            },
+            {
+                duration: 1.2,
+                ease: "easeOut"
+            }
+        );
+
+        // 4. Highlight cards animation
+        inView(".highlight-card", (element) => {
+
+            animate(element,
+                {
+                    opacity: [0, 1],
+                    y: [50, 0]
+                },
+                {
+                    duration: 0.8,
+                    ease: "easeOut"
+                }
+            );
+
+        });
+
+        // 5. Service cards animation
+        inView(".service-card", (element) => {
+
+            animate(element,
+                {
+                    opacity: [0, 1],
+                    y: [50, 0]
+                },
+                {
+                    duration: 0.8,
+                    ease: "easeOut"
+                }
+            );
+
+        });
+
+        // 6. Why choose us animation
+        inView(".why-card", (element) => {
+
+            animate(element,
+                {
+                    opacity: [0, 1],
+                    scale: [0.8, 1]
+                },
+                {
+                    duration: 0.8,
+                    ease: "easeOut"
+                }
+            );
+
+        });
+
+        // 7. Section heading animation
+        inView(".section-title", (element) => {
+
+            animate(element,
+                {
+                    opacity: [0, 1],
+                    y: [30, 0]
+                },
+                {
+                    duration: 0.8
+                }
+            );
+
+        });
+
+        // 8. Buttons hover animation
+        document.querySelectorAll(".btn").forEach(button => {
+
+            button.addEventListener("mouseenter", () => {
+
+                animate(button,
+                    { scale: 1.06 },
+                    { duration: 0.2 }
+                );
+
+            });
+
+            button.addEventListener("mouseleave", () => {
+
+                animate(button,
+                    { scale: 1 },
+                    { duration: 0.2 }
+                );
+
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>
