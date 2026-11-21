@@ -96,7 +96,7 @@ body {
             rgba(0, 30, 65, 0.78),
             rgba(0, 30, 65, 0.30)
         ),
-        url("/static/images/hospital_building.png");
+        url("/static/images/doctor_hero.png");
 
     background-size: cover;
     background-position: center;
